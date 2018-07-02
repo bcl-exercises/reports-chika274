@@ -1,4 +1,4 @@
-/.DS_Store
-/レポート（春休み課題）.aux
-/レポート（春休み課題）.log
-/レポート（春休み課題）.synctex.gz
+*.DS_Store
+*.aux
+*.log
+*.synctex.gz
