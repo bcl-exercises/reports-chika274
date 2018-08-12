@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
+#include "mylib.h"      //分割コンパイル(ファイルの読み書き)
 
 #define RAND_NUM 100  //データ数
 #define M 10          //区間を何当分するか
+#define FILES         //FILEにすると大量にエラーが出る
 
 void Usage(){
     printf("Usage: getdist [option] <file>\n"); 
@@ -17,17 +19,17 @@ void Statistics(double data[]){     //dataだとエラーになる（配列で�
     int i; 
     double average, max, min, std;
     double sum = 0.0, var = 0.0;
+    FILE* fp_w;
+
     /*平均*/
     for (i = 0; i < RAND_NUM; i++)
         sum += data[i];
     average = sum / RAND_NUM;
-    printf("平均：%lf\n", average);
-                
+
     /*標準偏差*/
     for (i = 0; i < RAND_NUM; i++)
         var += (data[i] - average) * (data[i] - average);
     std = sqrt(var/RAND_NUM);
-    printf("標準偏差：%lf\n", std);
 
     /*最大値*/
     max=data[0];
@@ -35,15 +37,26 @@ void Statistics(double data[]){     //dataだとエラーになる（配列で�
         if(data[i]>=max)
             max=data[i];
     }
-    printf("最大値：%lf\n", max);
-
     /*最小値*/
     min = data[0];
     for(i=1; i<=RAND_NUM-1; i++){
         if(data[i]<=min)
             min=data[i];
     }
-    printf("最小値：%lf\n", min); 
+    
+    #ifdef FILES
+        fp_w = fWopen("result.dat");
+        fprintf(fp_w,"平均：%lf\n", average);
+        fprintf(fp_w,"標準偏差：%lf\n", std);
+        fprintf(fp_w,"最大値：%lf\n", max);    
+        fprintf(fp_w,"最小値：%lf\n", min);
+        fclose(fp_w); 
+    #else
+        printf("平均：%lf\n", average);
+        printf("標準偏差：%lf\n", std);
+        printf("最大値：%lf\n", max);    
+        printf("最小値：%lf\n", min);
+    #endif
 }
 
 void Histgram(double data[]){
@@ -76,28 +89,29 @@ int main(int argc, char *argv[]){
     double data[RAND_NUM];
     double Average, Std, Max, Min;
 
-    /*ファイルの読み込み*/
-    if((fp_r = fopen("genrand.csv", "r"))==NULL)
-        printf("ファイルを読み込めません。");
-    fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
-    for (i=2; i < RAND_NUM; i++)                        //残りデータ
-        fscanf(fp_r, ",%lf ", &data[i]);    
-      
     /*オプションの判定と各処理*/
-    while((c = getopt(argc, argv, "ahg")) != -1){       //-h : Usageは出るがエラー文は出ないようにする
-        switch (c){
-             /* 「-a」オプションが指定された場合 */
-            case 'a':
+    while((c = getopt(argc, argv, "ahg")) != -1){       // ag以外はUsageを出して終了   
+        if(c!='a' && c!='g'){
+            Usage();                                    //-h : Usageは出るがエラー文は出ないようにする
+            break;
+        }                                                   
+        else{                                           // オプションがaまたはgの時
+            /*ファイルの読み込み*/
+            fp_r = fRopen(argv[2]);
+            fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
+            for (i=2; i < RAND_NUM; i++)                        //残りデータ
+                fscanf(fp_r, ",%lf ", &data[i]);  
+            /* 「-a」オプションが指定された場合 */
+            if (c=='a'){
                 Statistics(data);             
                 break;
-             /* 「-g」オプションが指定された場合 */
-            case 'g':
+            }
+            /* 「-g」オプションが指定された場合 */
+            else{
                 Histgram(data);
                 break;
-             /* それ以外のオプションが指定された場合 */
-            default:
-                Usage();
-         }
+            }
+        }            
     }
     return 0;
 }
