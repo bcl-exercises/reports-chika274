@@ -1,17 +1,18 @@
 /* 3.2 doubleとfloatの演算 */
-
 # include <stdio.h>
 
 int main(void)
 {
 	int i;
-	float x;
+	double x=0.0;
+	// float x=0.0;
 
-	x = 0.0;
-	for (i = 0; i <= 9; i += 1)
+	for (i = 0; i <= 9; i += 1){
 		x += 0.1;
 		printf("x = %.20f\n", x);
 		printf("i = %d\n", i);
+	}
+		
 	if(x==1)
 		printf("OK\n");
 
