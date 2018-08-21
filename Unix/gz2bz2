@@ -1,21 +1,19 @@
 #!/bin/sh
 
 for i in `ls`; do
-    if [ -f $i ]; then
-       	   case "$i" in 
-    	   	 *.gz)  gunzip $i
-		        echo "ZIP形式"
-    			#ls -lh
+    case "$i" in 
+    	*.gz) gunzip $i
+	    ARG="$i"
+	    NAME="${ARG%.gz}"
+	    NAME_bz2="$NAME.bz2"
 
-			ARG="$i"
-			NAME="${ARG%.gz}"
-			echo "name: $NAME"
+	    echo "ZIP形式"
+    	    du -b $NAME       #バイト単位で容量表示
+	    echo "*******************************"
 
-			bzip2 $NAME
-			echo "bz2形式"
-			#ls -lh 
-		        ;;
-	         *) ;;    
- 	   esac
-    fi
+	    bzip2 $NAME
+	    echo "bz2形式"
+    	    du -b $NAME_bz2
+	    ;; 
+    esac
 done

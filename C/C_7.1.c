@@ -4,7 +4,7 @@
 #define init 1.0
 #define dx 0.1
 #define terminal 10
-#define A 			
+#define A 1.0		
 
 //オイラー法のプログラム
 //X_diffは１階微分、X_afterはXi+1,X_beforeはXiの意味。
@@ -13,7 +13,7 @@ double X_diff, X_before, X_after, X, t_value;
 double exp(double t);
 
 int main(void){
-    X_before = 1.0;		//初期値
+    X_before = 0.0;		//初期値
     puts("t　　　オイラー法　解析解");
     printf("%.1lf    %lf   %lf\n", 0.0, init, init);
 
@@ -23,7 +23,7 @@ int main(void){
         X_after = X_before + X_diff*dx;		//Xi+1の値
 
         //解析解
-        X = A*exp(t_value);
+        X = A * exp(t_value);
 
         //表示
         printf("%.1lf    %lf   %lf\n", t_value, X_after, X);
@@ -33,3 +33,4 @@ int main(void){
 }
 
 //解析解の係数と、初期条件かわからないので、変数をどう設定すればいいかわからない。
+
