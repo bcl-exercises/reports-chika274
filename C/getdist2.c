@@ -5,8 +5,7 @@
 
 #define RAND_NUM 100  //データ数
 #define M 10          //区間を何当分するか
-// #define FILES         //FILEにすると大量にエラーが出る
-#define FILE_NAME "genrand.csv"
+#define FILES         //FILEにすると大量にエラーが出る
 
 void Usage(){
     printf("Usage: getdist [option] <file>\n"); 
@@ -65,6 +64,7 @@ void Histgram(double data[]){
     double z=1.0/M;        //刻み幅 (1ではなく1.0を割ることに注意！)
     int freq[M] = {0};   // 度数分布表
     double low = 0.0;    //取り得る一番小さな値
+    FILE* fp_w;
 
     // 度数分布表の作成
     for (i = 0; i < RAND_NUM; i++) {
@@ -76,12 +76,23 @@ void Histgram(double data[]){
         }
     }
     //表示
-    for (i = 0; i < M; i++) {
-        printf("%.1lf - %.1lf | ", low + z*i, low + z*(i+1));
-        for (j =0;  j<freq[i]; j++)
-            printf("*");
-        printf("\n");
-    }
+    #ifdef FILES
+        fp_w = fWopen("result.dat");
+        for (i = 0; i < M; i++) {
+            fprintf(fp_w,"%.1lf - %.1lf | ", low + z*i, low + z*(i+1));
+            for (j =0;  j<freq[i]; j++)
+                fprintf(fp_w,"*");
+            fprintf(fp_w,"\n");
+        }
+        fclose(fp_w); 
+    #else
+        for (i = 0; i < M; i++) {
+            printf("%.1lf - %.1lf | ", low + z*i, low + z*(i+1));
+            for (j =0;  j<freq[i]; j++)
+                printf("*");
+            printf("\n");
+        }
+    #endif
 }
 
 int main(int argc, char *argv[]){
@@ -96,9 +107,9 @@ int main(int argc, char *argv[]){
             Usage();                                    //-h : Usageは出るがエラー文は出ないようにする
             break;
         }                                                   
-        else{                                           // オプションがaまたはgの時
+        else{
             /*ファイルの読み込み*/
-            fp_r = fRPopen(FILE_NAME, argv);
+            fp_r = fRPopen(argc, argv);
             fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
             for (i=2; i < RAND_NUM; i++)                        //残りデータ
                 fscanf(fp_r, ",%lf ", &data[i]);  

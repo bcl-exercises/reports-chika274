@@ -15,23 +15,19 @@ FILE* fWopen(char* fname){
 	return fp;
 }
 
-FILE* fRPopen(char* fname, argv[]){       //char* argv[]
+FILE* fRPopen(int argc, char** argv){       //char* argv[]
     FILE* fp;
-    char buf[256];
+    char* fname;
 
-	if((fp = fopen(fname, "r"))==NULL)
-		fprintf(stderr,"Failed to open %s\n", fname);	
-
-    // コマンドを指定してパイプをオープン
-    if ((fp = popen(argv[1], "r")) == NULL) {
-        fprintf(stderr, "パイプのオープンに失敗しました！: argv[1]=%s\n", argv[1]);
+    fname = argv[argc-1];
+	if( fname[0]=='-' || argc==1){
+		fp = stdin;
+	}
+	else{
+		if((fp = fopen(fname, "r"))==NULL){
+        	fprintf(stderr, "'%s'が読み込めません。\n", fname);
+    		exit(1);
+    	}
     } 
-    // パイプからのコマンド実行結果を受け取り表示
-    while (fgets(buf, sizeof(buf), fp) != NULL) {
-        printf("%s", buf);
-    }
-    // パイプをクローズ
-    pclose(fp);
-	
 	return fp;
 }
