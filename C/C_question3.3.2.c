@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
 	else{
 		num1 = atof(argv[1]);
 		num2 = atof(argv[2]); 
-
 		sum = num1 + num2;
 
 		printf("%f\n",sum);
