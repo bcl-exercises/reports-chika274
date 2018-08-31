@@ -12,19 +12,15 @@ int main(int argc, char *argv[])
   num1 = atof(argv[1]);
   num2 = atof(argv[2]); 
 
-<<<<<<< HEAD
-	else{
-		num1 = atof(argv[1]);
-		num2 = atof(argv[2]); 
-		sum = num1 + num2;
-=======
   sum = num1 + num2;
 
   printf("%f\n",sum);
->>>>>>> 60aa08e957ae9d1f4f89e2ac7eaa20c1feb823ca
 
   return(0);
 }
+
+
+
 
 /*
 
