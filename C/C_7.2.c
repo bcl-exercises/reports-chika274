@@ -11,36 +11,40 @@
 int main(void){
 	int i;
 	double t, ana_t, ana_x;
-	double Vx[list_N], Vy[list_N];
-	double x[list_N], y[list_N];
+	double Vx, Vx_after, Vy, Vy_after;
+	double x, x_after, y, y_after;
 	double sin(double x), cos(double x);
 	double sqrt(double x), pow(double x, double y);	//powは、xをyの値でべき乗
 	
-	Vx[0] = v0*cos(theta);
-	Vy[0] = v0*sin(theta);
-	x[0] = 0;
-	y[0] = 0;
-	printf("＜オイラー法＞\n");	
-	printf("時刻　 x座標  y座標\n");
+	Vx = v0*cos(theta);
+	Vy = v0*sin(theta);
+	x = 0;
+	y = 0;
 
-	i = 0;
-	while (y[i] >= 0){
-		Vx[i+1] = Vx[i];
-	    Vy[i+1] = Vy[i] - g*dt;
-	    x[i+1] = x[i] + Vx[i]*dt;
-	    y[i+1] = y[i] + Vy[i]*dt;
-	    t = dt*i;
-
-	    printf("%lf  %lf  %lf\n", t, x[i], y[i]);
-		i += 1;
-
-	}
 	printf("＜解析解＞\n");
-	ana_t = 2*Vy[0]/g;		//地上に落ちるまでの時間
-	ana_x = Vx[0]*ana_t;
+	ana_t = 2*Vy/g;		//地上に落ちるまでの時間
+	ana_x = Vx*ana_t;
 	printf("時刻   x座標\n");
 	printf("%lf  %lf\n", ana_t, ana_x);
-	
+
+	i=0;
+	printf("＜オイラー法＞\n");	
+	printf("時刻　 x座標  y座標\n");
+	while (y >= 0.0){
+	    Vx_after = Vx;
+	    Vy_after = Vy - g*dt;
+
+	    x_after = x + Vx*dt;
+	    y_after = y + Vy*dt;
+	    t = dt*i;
+	    printf("%lf  %lf  %lf\n", t, x, y);
+
+	    x = x_after;
+	    y = y_after;
+	    Vx = Vx_after;
+	    Vy = Vy_after; 
+	    i += 1;
+	}
 	return 0;
 }
 

@@ -3,21 +3,20 @@
 
 int main(int argc, char *argv[])
 {
-	float num1, num2, sum;
+  float num1, num2, sum;
 
-	if (argc != 3)
-		puts("Usage: sum <num1> <num2>");
+  if (argc != 3){
+    puts("Usage: sum <num1> <num2>");
+    return(0);
+  }
+  num1 = atof(argv[1]);
+  num2 = atof(argv[2]); 
 
-	else{
-		num1 = atof(argv[1]);
-		num2 = atof(argv[2]); 
+  sum = num1 + num2;
 
-		sum = num1 + num2;
+  printf("%f\n",sum);
 
-		printf("%f\n",sum);
-	}
-
-	return(0);
+  return(0);
 }
 
 /*
