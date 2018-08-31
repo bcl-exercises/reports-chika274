@@ -2,21 +2,19 @@
 #include <math.h>
 
 #define init 1.0
-#define dx 0.00000000001
-#define terminal 1/dx
+#define dev 10000000
 #define A init		
 
-//オイラー法のプログラム
 //X_diffは１階微分、X_afterはXi+1,X_beforeはXiの意味。
 int i,t0 = init; 
-double X_diff, X_before, X_after, X, t_value;
+double X_diff, X_before, X_after, X, t_value, dx=1.0/dev;
 double exp(double t);
 
 int main(void){
     puts("t　　　オイラー法　解析解");
     printf("%.1lf    %lf   %lf\n", 0.0, init, init);
 
-    for (i = 0; i < terminal; i++){
+    for (i = 0; i < dev; i++){
     	if (i == 0)
     		X_before = init;		//初期値
         t_value = dx*(i+1);

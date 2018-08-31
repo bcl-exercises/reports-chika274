@@ -9,10 +9,7 @@ int main(void){
 
     for(i=0;i<100;i++){
     	num = (double)rand()/RAND_MAX;     //「RAND_MAX」: 乱数の最大値の定数
-    	if (i==0)
-    		printf("%lf", num);
-    	else
-        	printf(",%lf",num);
+ 	printf("%lf\n", num);
     }
     return 0;
 }
