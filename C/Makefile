@@ -1,7 +1,6 @@
 getdist: getdist.o mylib.o
 	gcc getdist.o mylib.o -o getdist -lm
 
-
 getdist.o: getdist.c
 	gcc getdist.c -c
 
