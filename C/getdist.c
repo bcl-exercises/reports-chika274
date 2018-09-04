@@ -73,14 +73,14 @@ void Histgram(double data[], FILE* fp_w){
 }
 
 int main(int argc, char *argv[]){
-  int c, i;
+  int opt, i;
   FILE *fp_r, *fp_w;
   double data[RAND_NUM];
   double Average, Std, Max, Min;
 
   /*オプションの判定と各処理*/
-  while((c = getopt(argc, argv, "ahg")) != -1){       // ag以外はUsageを出して終了   
-    if(c!='a' && c!='g'){
+  while((opt = getopt(argc, argv, "ahg")) != -1){       // ag以外はUsageを出して終了   
+    if(opt!='a' && opt!='g'){
       Usage();                                    //-h : Usageは出るがエラー文は出ないようにする
       return(0);
     }                                                   
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
     #endif
   
     /* 「-a」オプションが指定された場合 */
-    if (c=='a'){
+    if (opt=='a'){
       Statistics(data, fp_w);                   
       break;
     }
