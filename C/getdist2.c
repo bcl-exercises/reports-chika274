@@ -5,6 +5,8 @@
 
 #define RAND_NUM 100  //データ数
 #define M 10          //区間を何当分するか
+#define True 0
+#define False 1
 #define FILES         //FILEにすると大量にエラーが出る
 
 void Usage(){
@@ -67,7 +69,7 @@ void Histgram(double data[], FILE* fp_w){
     for (i = 0; i < M; i++) {
       fprintf(fp_w,"%.1lf - %.1lf | ", low + z*i, low + z*(i+1));
       for (j =0;  j<freq[i]; j++)
-	fprintf(fp_w,"*");
+	       fprintf(fp_w,"*");
       fprintf(fp_w,"\n");
     }
 }
@@ -77,38 +79,51 @@ int main(int argc, char *argv[]){
     FILE *fp_r, *fp_w;
     double data[RAND_NUM];
     double Average, Std, Max, Min;
+    int flag_a = False;
+    int flag_g = False;
 
     /*オプションの判定と各処理*/
-    while((opt = getopt(argc, argv, "ahg")) != -1){       // ag以外はUsageを出して終了   
-        if(opt!='a' && opt!='g'){
-            Usage();                                    //-h : Usageは出るがエラー文は出ないようにする
-            break;
+    while((opt = getopt(argc, argv, "ahg")) != -1){       // ag以外はUsageを出して終了 
+        switch(opt){  
+            case 'a':
+                flag_a = True;
+                break;
+            case 'g':
+                flag_g = True;
+                break;
+            default:
+                Usage();
+                return(0);
         }                                                   
-        else{
-            /*ファイルの読み込み*/
-            fp_r = fRPopen(argc, argv);
-            fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
-            for (i=2; i < RAND_NUM; i++)                        //残りデータ
-                fscanf(fp_r, ",%lf ", &data[i]);  
-
-	    /*ファイルへの書き込み*/
-            #ifdef FILES
-            fp_w = fWopen("result.dat");
-            #else
-            fp_w = fWopen("");
-            #endif
-
-            /* 「-a」オプションが指定された場合 */
-            if (opt=='a'){
-	      Statistics(data, fp_w);             
-              break;
-            }
-            /* 「-g」オプションが指定された場合 */
-            else{
-	      Histgram(data, fp_w);
-              break;
-            }
-        }            
     }
-    return 0;
+
+    /*ファイルの読み込み*/
+    fp_r = fRPopen(argc, argv);
+    fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
+    for (i=2; i < RAND_NUM; i++)                        //残りデータ
+      fscanf(fp_r, ",%lf ", &data[i]);
+
+    /*ファイルへの書き込み*/
+    #ifdef FILES
+    fp_w = fWopen("result.dat");
+    #else
+    fp_w = fWopen("");
+    #endif
+  
+    /* 「-a」オプションが指定された場合 */
+    if (flag_a==True){
+      Statistics(data, fp_w);                   
+    }
+
+    /* 「-g」オプションが指定された場合 */
+    if (flag_g==True){
+      Histgram(data, fp_w); 
+    }            
+  
+    /*ファイルのクローズ*/
+    #ifdef FILES
+    fclose(fp_w);  
+    #endif
+
+    return(0);
 }
