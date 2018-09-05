@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case "$1" in
+     *.tar.gz) ARG="$1"
+	       NAME="${ARG%gz}"
+	       echo ${NAME}bz2 ;;
+
+     *) ;;
+esac
