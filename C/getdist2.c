@@ -99,9 +99,8 @@ int main(int argc, char *argv[]){
 
     /*ファイルの読み込み*/
     fp_r = fRPopen(argc, argv);
-    fscanf(fp_r, "%lf ,%lf ", &data[0], &data[1]);      //最初２つの要素
-    for (i=2; i < RAND_NUM; i++)                        //残りデータ
-      fscanf(fp_r, ",%lf ", &data[i]);
+    for (i=0; i < RAND_NUM; i++)                        //残りデータ
+      fscanf(fp_r, "%lf", &data[i]);
 
     /*ファイルへの書き込み*/
     #ifdef FILES
